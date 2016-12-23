@@ -64,13 +64,38 @@ class Map
   end
 
   def lookup(key)
-    @map.each do |pair|
-      pair[1] if pair.include?(key)
+    @map.each {|pair| pair[1] if pair[0] == key}
     end
   end
 
   def delete(key)
     @map.delete_if {|pair| pair[0] == key}
   end
-  
+
+  def show
+    deep_dup(@map)
+  end
+
+  private
+
+  def deep_dup
+    duplicate = []
+    return if duplicate == array
+
+    array.each do |element|
+      if element.is_a?(Array)
+        duplicate << deep_dup(element)
+
+      elsif element.is_a?Fixnum
+        duplicate << element
+      else
+        duplicate << element.dup
+      end
+
+    end
+    duplicate
+
+  end
+
+
 end
